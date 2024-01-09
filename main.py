@@ -46,5 +46,5 @@ async def dark(ctx):
     await ctx.send(joke)
 
 keep_alive()
-TOKEN = os.environ.get("DISCORD_BOT_SECRET")
+TOKEN = os.environ.get("token")
 client.run(TOKEN)
