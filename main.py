@@ -3,9 +3,11 @@ import requests
 import bs4
 import random
 import warnings
+import os
 import asyncio
 from discord.ext import commands
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+from webserver import keep_alive
 
 warnings.filterwarnings("ignore", category=InsecureRequestWarning)
 
@@ -43,5 +45,6 @@ async def dark(ctx):
     joke = random.choice(jokes)
     await ctx.send(joke)
 
-TOKEN = "MTExNzA3Nzk1MDAzMDkzODExMg.Gw7VH8.k9I7rIYbZCWxyVUbUkPRoSKwg6jTOXyFO83FLU"
+keep_alive()
+TOKEN = os.environ.get("DISCORD_BOT_SECRET")
 client.run(TOKEN)
