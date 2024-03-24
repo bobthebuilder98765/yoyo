@@ -10,7 +10,6 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from webserver import keep_alive
 
 warnings.filterwarnings("ignore", category=InsecureRequestWarning)
-
 client = commands.Bot(command_prefix='/', intents=discord.Intents.all())
 
 def get_jokes(URL):
@@ -23,27 +22,35 @@ def get_jokes(URL):
         jokes.append(element.text)
     return jokes
 
-@client.command()
-async def urmom(ctx, user: discord.Member = None):
+@client.hybrid_command()
+async def urmom(ctx: commands.Context, user: discord.Member = None):
     jokes = get_jokes("https://jokes.yo-yoo.co.il/?cat=%E0%EE%E0%F9%EA")
     jokes += get_jokes("https://jokes.yo-yoo.co.il/?cat=%E0%EE%E0%F9%EA&page=2")
     joke = random.choice(jokes)
     if user is None:
-        user = ctx.message.author
-    message = f"@{user.mention} {joke}"
+        user = ctx.author
+    message = f"{user.mention} {joke}"
     await ctx.send(message)
 
-@client.command()
-async def joke(ctx):
+@client.hybrid_command()
+async def plank(ctx: commands.Context):
     jokes = get_jokes("https://jokes.yo-yoo.co.il/?cat=%F7%F8%F9")
     joke = random.choice(jokes)
     await ctx.send(joke)
 
-@client.command()
-async def dark(ctx):
+@client.hybrid_command()
+async def dark(ctx: commands.Context):
     jokes = get_jokes("https://jokes.yo-yoo.co.il/?cat=%E4%E5%EE%E5%F8%20%F9%E7%E5%F8")
     joke = random.choice(jokes)
     await ctx.send(joke)
+
+
+@client.event
+async def on_ready():
+    await client.tree.sync()
+    print(f'{client.user} has connected to Discord!')
+    await client.tree.sync()
+
 
 keep_alive()
 TOKEN = os.environ.get("token")
